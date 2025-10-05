@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class DetailsScreen extends StatelessWidget {
+class DetailsScreen extends StatefulWidget {
   final String recipeName;
   final String imagePath;
   final List<String> ingredients;
@@ -17,13 +17,20 @@ class DetailsScreen extends StatelessWidget {
   });
 
   @override
+  State<DetailsScreen> createState() => _DetailsScreenState();
+}
+
+class _DetailsScreenState extends State<DetailsScreen> {
+  bool isFavorite = false; // Track favorite state
+
+  @override
   Widget build(BuildContext context) {
     final pastelBackground = Color(0xFFF3E5F5);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(recipeName),
-        backgroundColor: pastelColor,
+        title: Text(widget.recipeName),
+        backgroundColor: widget.pastelColor,
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -35,11 +42,47 @@ class DetailsScreen extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: Image.asset(
-                  imagePath,
+                  widget.imagePath,
                   width: double.infinity,
                   height: 200,
                   fit: BoxFit.cover,
                 ),
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    widget.recipeName,
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: widget.pastelColor,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: Colors.red,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        isFavorite = !isFavorite;
+                      });
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            isFavorite
+                                ? '${widget.recipeName} added to favorites'
+                                : '${widget.recipeName} removed from favorites',
+                          ),
+                          duration: const Duration(seconds: 1),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               Text(
@@ -47,29 +90,32 @@ class DetailsScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: pastelColor,
+                  color: widget.pastelColor,
                 ),
               ),
               const SizedBox(height: 8),
-              ...ingredients.map((item) => Text('- $item', style: const TextStyle(fontSize: 18))),
+              ...widget.ingredients
+                  .map((item) => Text('- $item', style: const TextStyle(fontSize: 18))),
               const SizedBox(height: 16),
               Text(
                 'Instructions',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: pastelColor,
+                  color: widget.pastelColor,
                 ),
               ),
               const SizedBox(height: 8),
-              ...instructions.asMap().entries.map((entry) =>
-                  Text('${entry.key + 1}. ${entry.value}', style: const TextStyle(fontSize: 18))),
+              ...widget.instructions.asMap().entries.map((entry) => Text(
+                    '${entry.key + 1}. ${entry.value}',
+                    style: const TextStyle(fontSize: 18),
+                  )),
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
                   onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: pastelColor,
+                    backgroundColor: widget.pastelColor,
                   ),
                   child: const Text('Back to Recipes'),
                 ),
