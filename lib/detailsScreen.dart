@@ -6,6 +6,8 @@ class DetailsScreen extends StatefulWidget {
   final List<String> ingredients;
   final List<String> instructions;
   final Color pastelColor;
+  final bool isFavorite;
+  final Function(bool) onFavoriteChanged;
 
   const DetailsScreen({
     super.key,
@@ -14,6 +16,8 @@ class DetailsScreen extends StatefulWidget {
     required this.ingredients,
     required this.instructions,
     required this.pastelColor,
+    required this.isFavorite,
+    required this.onFavoriteChanged,
   });
 
   @override
@@ -21,7 +25,13 @@ class DetailsScreen extends StatefulWidget {
 }
 
 class _DetailsScreenState extends State<DetailsScreen> {
-  bool isFavorite = false; // Track favorite state
+  late bool isFavorite;
+
+  @override
+  void initState() {
+    super.initState();
+    isFavorite = widget.isFavorite;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +80,7 @@ class _DetailsScreenState extends State<DetailsScreen> {
                       setState(() {
                         isFavorite = !isFavorite;
                       });
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            isFavorite
-                                ? '${widget.recipeName} added to favorites'
-                                : '${widget.recipeName} removed from favorites',
-                          ),
-                          duration: const Duration(seconds: 1),
-                        ),
-                      );
+                      widget.onFavoriteChanged(isFavorite);
                     },
                   ),
                 ],
@@ -94,8 +95,9 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              ...widget.ingredients
-                  .map((item) => Text('- $item', style: const TextStyle(fontSize: 18))),
+              ...widget.ingredients.map(
+                (item) => Text('- $item', style: const TextStyle(fontSize: 18)),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Instructions',
@@ -106,10 +108,12 @@ class _DetailsScreenState extends State<DetailsScreen> {
                 ),
               ),
               const SizedBox(height: 8),
-              ...widget.instructions.asMap().entries.map((entry) => Text(
-                    '${entry.key + 1}. ${entry.value}',
-                    style: const TextStyle(fontSize: 18),
-                  )),
+              ...widget.instructions.asMap().entries.map(
+                    (entry) => Text(
+                      '${entry.key + 1}. ${entry.value}',
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ),
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
