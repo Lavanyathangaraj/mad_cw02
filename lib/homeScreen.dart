@@ -2,51 +2,155 @@ import 'package:flutter/material.dart';
 import 'detailsScreen.dart';
 
 class HomeScreen extends StatelessWidget {
-  final List<Map<String, String>> recipes = [
+  final List<Map<String, dynamic>> recipes = [
     {
       'name': 'Pepper Chicken',
-      'details': 'A spicy chicken dish made with black pepper and aromatic spices.',
-      'image': 'assets/images/pepperChicken.jpg'
+      'image': 'assets/images/pepperChicken.jpg',
+      'ingredients': [
+        '500g chicken',
+        '2 tsp black pepper',
+        '1 tbsp oil',
+        'Salt to taste',
+        'Garlic and ginger paste'
+      ],
+      'instructions': [
+        'Marinate chicken with salt, pepper, and paste.',
+        'Heat oil in a pan and cook chicken until golden brown.',
+        'Add spices and simmer for 10 minutes.',
+        'Serve hot.'
+      ],
     },
     {
       'name': 'Mutton Biryani',
-      'details': 'A flavorful rice dish with marinated mutton and spices.',
-      'image': 'assets/images/muttonBiryani.jpg'
+      'image': 'assets/images/muttonBiryani.jpg',
+      'ingredients': [
+        '500g mutton',
+        '2 cups basmati rice',
+        '1 tbsp biryani masala',
+        'Onion, garlic, ginger',
+        'Yogurt'
+      ],
+      'instructions': [
+        'Marinate mutton with yogurt and spices.',
+        'Cook rice separately until 70% done.',
+        'Layer rice and mutton in a pot.',
+        'Cook on low heat for 30 minutes.',
+        'Serve with raita.'
+      ],
     },
     {
       'name': 'Broccoli Stir Fry',
-      'details': 'Quick stir fry with broccoli, garlic, and soy sauce.',
-      'image': 'assets/images/broccoliStirFry.jpg'
+      'image': 'assets/images/broccoliStirFry.jpg',
+      'ingredients': [
+        '1 head broccoli',
+        '2 tbsp soy sauce',
+        '1 tbsp olive oil',
+        '2 cloves garlic'
+      ],
+      'instructions': [
+        'Heat oil in a pan and sauté garlic.',
+        'Add broccoli and stir fry for 5-6 minutes.',
+        'Add soy sauce and cook for 2 more minutes.',
+        'Serve immediately.'
+      ],
     },
     {
       'name': 'Steamed Salmon',
-      'details': 'Fresh salmon steamed with lemon and herbs.',
-      'image': 'assets/images/steamedSalmon.jpg'
+      'image': 'assets/images/steamedSalmon.jpg',
+      'ingredients': [
+        '2 salmon fillets',
+        '1 lemon',
+        'Salt and pepper',
+        'Herbs (dill or parsley)'
+      ],
+      'instructions': [
+        'Season salmon with salt, pepper, and herbs.',
+        'Place in steamer and steam for 10-12 minutes.',
+        'Squeeze lemon over salmon and serve.'
+      ],
     },
     {
       'name': 'Mashed Potato',
-      'details': 'Creamy mashed potatoes with butter and cream.',
-      'image': 'assets/images/mashedPotatoes.jpg'
+      'image': 'assets/images/mashedPotatoes.jpg',
+      'ingredients': [
+        '4 large potatoes',
+        '2 tbsp butter',
+        '1/4 cup milk',
+        'Salt and pepper'
+      ],
+      'instructions': [
+        'Boil potatoes until soft.',
+        'Mash potatoes and add butter and milk.',
+        'Season with salt and pepper.',
+        'Serve warm.'
+      ],
     },
     {
       'name': 'Salad',
-      'details': 'Fresh garden salad with lettuce, tomatoes, and dressing.',
-      'image': 'assets/images/salad.jpg'
+      'image': 'assets/images/salad.jpg',
+      'ingredients': [
+        'Lettuce',
+        'Tomatoes',
+        'Cucumbers',
+        'Olive oil and lemon juice'
+      ],
+      'instructions': [
+        'Wash and chop vegetables.',
+        'Mix in a bowl.',
+        'Add olive oil and lemon juice as dressing.',
+        'Serve fresh.'
+      ],
     },
     {
       'name': 'Tiramisu',
-      'details': 'Classic Italian dessert with coffee-soaked ladyfingers and mascarpone.',
-      'image': 'assets/images/tiramisu.jpg'
+      'image': 'assets/images/tiramisu.jpg',
+      'ingredients': [
+        'Ladyfingers',
+        'Mascarpone cheese',
+        'Coffee',
+        'Cocoa powder',
+        'Sugar'
+      ],
+      'instructions': [
+        'Dip ladyfingers in coffee.',
+        'Layer with mascarpone mixture.',
+        'Repeat layers and top with cocoa powder.',
+        'Chill for 2-3 hours before serving.'
+      ],
     },
     {
       'name': 'Baklava',
-      'details': 'Sweet pastry made of layers of filo dough, nuts, and honey.',
-      'image': 'assets/images/baklava.jpg'
+      'image': 'assets/images/baklava.jpg',
+      'ingredients': [
+        'Filo dough',
+        'Chopped nuts',
+        'Honey',
+        'Butter'
+      ],
+      'instructions': [
+        'Layer filo sheets and brush with butter.',
+        'Sprinkle chopped nuts between layers.',
+        'Bake until golden brown.',
+        'Drizzle honey on top and cool before serving.'
+      ],
     },
     {
       'name': 'Brownies',
-      'details': 'Rich chocolate brownies with a fudgy center.',
-      'image': 'assets/images/brownies.jpg'
+      'image': 'assets/images/brownies.jpg',
+      'ingredients': [
+        '200g dark chocolate',
+        '150g butter',
+        '150g sugar',
+        '3 eggs',
+        '100g flour'
+      ],
+      'instructions': [
+        'Melt chocolate and butter together.',
+        'Whisk in sugar and eggs.',
+        'Fold in flour gently.',
+        'Bake at 180°C for 20-25 minutes.',
+        'Cool and cut into squares.'
+      ],
     },
   ];
 
@@ -57,7 +161,7 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Taste of Ilaan'),
+        title: const Text("Ilaan's Recipe Book"),
         backgroundColor: pastelPurple,
       ),
       body: ListView.builder(
@@ -70,14 +174,14 @@ class HomeScreen extends StatelessWidget {
               leading: ClipRRect(
                 borderRadius: BorderRadius.circular(6),
                 child: Image.asset(
-                  recipes[index]['image']!,
+                  recipes[index]['image'],
                   width: 50,
                   height: 50,
                   fit: BoxFit.cover,
                 ),
               ),
               title: Text(
-                recipes[index]['name']!,
+                recipes[index]['name'],
                 style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
@@ -89,9 +193,10 @@ class HomeScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) => DetailsScreen(
-                      recipeName: recipes[index]['name']!,
-                      recipeDetails: recipes[index]['details']!,
-                      imagePath: recipes[index]['image']!,
+                      recipeName: recipes[index]['name'],
+                      imagePath: recipes[index]['image'],
+                      ingredients: recipes[index]['ingredients'],
+                      instructions: recipes[index]['instructions'],
                       pastelColor: pastelPurple,
                     ),
                   ),

@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 
 class DetailsScreen extends StatelessWidget {
   final String recipeName;
-  final String recipeDetails;
   final String imagePath;
+  final List<String> ingredients;
+  final List<String> instructions;
   final Color pastelColor;
 
   const DetailsScreen({
     super.key,
     required this.recipeName,
-    required this.recipeDetails,
     required this.imagePath,
+    required this.ingredients,
+    required this.instructions,
     required this.pastelColor,
   });
 
@@ -41,24 +43,31 @@ class DetailsScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                recipeName,
+                'Ingredients',
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
                   color: pastelColor,
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 8),
+              ...ingredients.map((item) => Text('- $item', style: const TextStyle(fontSize: 18))),
+              const SizedBox(height: 16),
               Text(
-                recipeDetails,
-                style: const TextStyle(fontSize: 18),
+                'Instructions',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: pastelColor,
+                ),
               ),
+              const SizedBox(height: 8),
+              ...instructions.asMap().entries.map((entry) =>
+                  Text('${entry.key + 1}. ${entry.value}', style: const TextStyle(fontSize: 18))),
               const SizedBox(height: 20),
               Center(
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: () => Navigator.pop(context),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: pastelColor,
                   ),
