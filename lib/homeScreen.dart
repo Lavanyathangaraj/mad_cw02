@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 import 'detailsScreen.dart';
+import 'favoritesScreen.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final List<Map<String, dynamic>> recipes = [
     {
       'name': 'Pepper Chicken',
@@ -154,6 +162,16 @@ class HomeScreen extends StatelessWidget {
     },
   ];
 
+  final Map<String, bool> favoriteMap = {};
+
+  @override
+  void initState() {
+    super.initState();
+    for (var recipe in recipes) {
+      favoriteMap[recipe['name']] = false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final pastelPurple = Color(0xFFB39DDB);
@@ -164,47 +182,88 @@ class HomeScreen extends StatelessWidget {
         title: const Text("Ilaan's Recipe Book"),
         backgroundColor: pastelPurple,
       ),
-      body: ListView.builder(
-        itemCount: recipes.length,
-        itemBuilder: (context, index) {
-          return Card(
-            color: pastelBackground,
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-            child: ListTile(
-              leading: ClipRRect(
-                borderRadius: BorderRadius.circular(6),
-                child: Image.asset(
-                  recipes[index]['image'],
-                  width: 50,
-                  height: 50,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              title: Text(
-                recipes[index]['name'],
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              trailing: Icon(Icons.arrow_forward_ios, size: 16, color: pastelPurple),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DetailsScreen(
-                      recipeName: recipes[index]['name'],
-                      imagePath: recipes[index]['image'],
-                      ingredients: recipes[index]['ingredients'],
-                      instructions: recipes[index]['instructions'],
-                      pastelColor: pastelPurple,
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: recipes.length,
+              itemBuilder: (context, index) {
+                final recipe = recipes[index];
+                return Card(
+                  color: pastelBackground,
+                  margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  child: ListTile(
+                    leading: ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: Image.asset(
+                        recipe['image'],
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                      ),
                     ),
+                    title: Text(
+                      recipe['name'],
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    trailing: Icon(
+                      favoriteMap[recipe['name']]!
+                          ? Icons.favorite
+                          : Icons.arrow_forward_ios,
+                      color: favoriteMap[recipe['name']]! ? Colors.red : pastelPurple,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetailsScreen(
+                            recipeName: recipe['name'],
+                            imagePath: recipe['image'],
+                            ingredients: recipe['ingredients'],
+                            instructions: recipe['instructions'],
+                            pastelColor: pastelPurple,
+                            isFavorite: favoriteMap[recipe['name']]!,
+                            onFavoriteChanged: (value) {
+                              setState(() {
+                                favoriteMap[recipe['name']] = value;
+                              });
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
             ),
-          );
-        },
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => FavoritesScreen(
+                      recipes: recipes,
+                      favoriteMap: favoriteMap,
+                    ),
+                  ),
+                ).then((_) {
+                  setState(() {});
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: pastelPurple,
+                minimumSize: const Size(double.infinity, 50),
+              ),
+              child: const Text('View Favorites'),
+            ),
+          ),
+        ],
       ),
     );
   }

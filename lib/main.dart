@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 import 'homeScreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const RecipeBookApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class RecipeBookApp extends StatelessWidget {
+  const RecipeBookApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: "Ilaan's Recipe Book",
       debugShowCheckedModeBanner: false,
-      title: 'Recipe App',
       theme: ThemeData(
-        primarySwatch: Colors.green,
+        primarySwatch: Colors.purple,
       ),
       home: HomeScreen(),
     );
